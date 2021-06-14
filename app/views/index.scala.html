@@ -1,0 +1,40 @@
+@import models._
+@import controllers._
+@(title:String)(posts: List[MyBoardFileBacked])
+
+@main(title) {
+  <h1>MyBoard</h1>
+  <h2>新規投稿</h2>
+  <div id="PostForm">
+   <form method="post" action="@routes.MyBoard.insert()">
+     名前：<input name="name" size="30" /><br/>
+     Email:<input name="email" size="30" /><br/>
+     <div id="postMessage">
+       <textarea name="message" rows="10" cols="30"></textarea>
+     </div>
+     <input type="submit" value="投稿"/>
+   </form>
+  </div>
+
+  @for(post <- posts){
+    <p>
+      <h3>No.@post.id</h3>
+      お名前：@post.name<br />
+    </p>
+    <p>
+    本文<br />
+    </p>
+    @Html(post.message.replaceAll("(\r\n|\r|\n)","<br/>"))
+    <div class="timpstamp" style="text-align: right">
+      投稿日時：@post.postedAt<br />
+      更新日時：@post.updatedAt<br />
+      <button name="" onclick="location.href='@routes.MyBoard.edit(post.id)'" style="display: inline">更新</button>
+      <form method="post" action="@routes.MyBoard.delete" style="display: inline">
+        <input type="hidden" name="id" value="@post.id" />
+        <input type="submit" value="削除" style="display: inline"/>
+
+      </form>
+    </div>
+    <hr />
+  }
+}
